@@ -3,10 +3,10 @@ from gensim.models import Doc2Vec
 from konlpy.tag import Twitter
 
 twitter = Twitter()
-###
+'''
 전처리기는 학습된 특성변환 모델을 불어들여 
 입력된 문자열을 벡터로 변환한다. 
-###
+'''
 class Preprocessor:
     def __init__(self):
         self.para = ''

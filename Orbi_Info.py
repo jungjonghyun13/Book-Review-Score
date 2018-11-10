@@ -11,10 +11,10 @@ from dateutil.parser import parse
 class Orbi:
     def __init__(self,s1,s2,d1,d2) :
         #교재,과목, 시작날짜, 끝날짜
-        self.o_s1 =s1
-        self.o_s2 =s2      
-        self.o_d1 =d1
-        self.o_d2 =d2
+        self.bookName =s1
+        self.subjectName =s2      
+        self.startDate =d1
+        self.endDate =d2
         
         #댓글수,조회수,언급수 총합 
         self.comSum=0 
@@ -82,26 +82,26 @@ class Orbi:
 
     def find(self,subjectName, title, content, comments, tags):
         all=title+content+comments+tags
-        if self.o_s2 in all:
+        if self.subjectName in all:
             return True
         else:
             return False
         
     def crawlingData(self,bookName, subjectName, startDate, endDate):
-        self.o_s1 =bookName
-        self.o_s2 =subjectName
-        self.o_d1 =startDate
-        self.o_d2 =endDate
+        self.bookName =bookName
+        self.subjectName =subjectName
+        self.startDate =startDate
+        self.endDate =endDate
         
         global mod_year
         max_page=1000
         l=[]#리스트
         l2=[]#총합 저장할 리스트
-        sDate=parse(self.o_d1)
-        eDate=parse(self.o_d2)
+        sDate=parse(self.startDate)
+        eDate=parse(self.endDate)
         
         for page in range(max_page):
-            r = requests.get("https://orbi.kr/search?q="+self.o_s1+"&type=keyword&page="+str(page+1))
+            r = requests.get("https://orbi.kr/search?q="+self.bookName+"&type=keyword&page="+str(page+1))
             c = r.content
             soup = BeautifulSoup(c, "html.parser")
 
@@ -131,7 +131,7 @@ class Orbi:
                     comments_num=item.find("p", {"class": "title"}).find("span",{"class":"comment-count"}).text
                 
                     content,comments,tags,hits_num = self.linkOpen(modify_linkNum, d)
-                    if self.find(self.o_s2, title, content, comments, tags) is False:
+                    if self.find(self.subjectName, title, content, comments, tags) is False:
                         continue
                    
                     d["7hits_num"]=int(hits_num)

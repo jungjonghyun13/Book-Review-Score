@@ -21,7 +21,7 @@ class Naver:
         
         #댓글수,조회수,언급수 총합 
         self.comSum=0 
-        self.hitSum=0 
+ #       self.hitSum=0 
         self.refSum=0
         
         
@@ -52,36 +52,7 @@ class Naver:
             p3=p
         self.refSum=p3
         return ceil(int(p3)/10)
-    
-    #조회수가 사라져서 죄다 *로 나옵니다...
-    def bringHitNum(self,oburl):
-        r=requests.get(oburl)
-        c=r.content
-        soup = BeautifulSoup(c, "html.parser")
-        all=soup.find("div",{"class":"end_qbox"})
-        if(all==None):
-            #print(oburl)
-            return '*'
-        all2=all.find("div")
-        all3=all2.find("div")
-        all4=all3.find("div")
-        all5=all4.find("dl")
-    
-        if(all5==None):
-            #print(oburl)
-            return '*'
-        hN=all5.text.split("조회수")        
-        final_hn=hN[1].split("\n")
-        
-        midHN=final_hn[0]
-        #"," 예외처리
-        if(len(midHN)>=4):
-            NmidHN=midHN.split(",")
-            Nfinal_hn=NmidHN[0]+NmidHN[1]
-        else:
-            Nfinal_hn=midHN
-        return(int(Nfinal_hn))
-    
+  
     def bringContent(self,oburl):
         return_list=""
         r=requests.get(oburl)
@@ -162,7 +133,7 @@ class Naver:
                 d["4content"]=self.bringContent(linkNum)
                 d["5comment"]=self.bringComment(linkNum)
                 d["6commentNum"]=self.bringCommentNum(linkNum)
-                d["7hitNum"]=self.bringHitNum(linkNum)
+   #             d["7hitNum"]=self.bringHitNum(linkNum)
                 
                 self.comSum+=d["6commentNum"]
               #  self.hitSum+=d["7hitNum"]
@@ -171,10 +142,39 @@ class Naver:
                 df=pd.DataFrame(l)
                
         dict2["commentSum"]=self.comSum
-        dict2["hitSum"]=self.hitSum
+    #    dict2["hitSum"]=self.hitSum
         dict2["refSum"]=self.refSum
         
         l2.append(dict2)
         df2=pd.DataFrame(l2)
         
         return df,df2
+    
+    '''    #조회수가 사라져서 죄다 *로 나옵니다...
+    def bringHitNum(self,oburl):
+        r=requests.get(oburl)
+        c=r.content
+        soup = BeautifulSoup(c, "html.parser")
+        all=soup.find("div",{"class":"end_qbox"})
+        if(all==None):
+            #print(oburl)
+            return '*'
+        all2=all.find("div")
+        all3=all2.find("div")
+        all4=all3.find("div")
+        all5=all4.find("dl")
+    
+        if(all5==None):
+            #print(oburl)
+            return '*'
+        hN=all5.text.split("조회수")        
+        final_hn=hN[1].split("\n")
+        
+        midHN=final_hn[0]
+        #"," 예외처리
+        if(len(midHN)>=4):
+            NmidHN=midHN.split(",")
+            Nfinal_hn=NmidHN[0]+NmidHN[1]
+        else:
+            Nfinal_hn=midHN
+        return(int(Nfinal_hn))'''  

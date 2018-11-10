@@ -21,9 +21,8 @@ class Naver:
         
         #댓글수,조회수,언급수 총합 
         self.comSum=0 
- #       self.hitSum=0 
         self.refSum=0
-        
+#       self.hitSum=0 
         
     def bringPages(self,oburl):
         r=requests.get(oburl)

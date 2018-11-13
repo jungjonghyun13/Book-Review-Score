@@ -1,4 +1,4 @@
-﻿import requests, operator, glob2
+import requests, operator, glob2
 from pandas import DataFrame
 import pandas as pd
 from bs4 import BeautifulSoup

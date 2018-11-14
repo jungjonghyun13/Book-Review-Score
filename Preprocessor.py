@@ -13,7 +13,7 @@ class Preprocessor:
         self.para = ''
         # load train data
         # doc2vec 에서 필요한 데이터 형식으로 변경
-        self.doc_vectorizer = Doc2Vec.load('model_jh/리뷰모음_train_랄라.model')
+        self.doc_vectorizer = Doc2Vec.load('model/DocVec.model')
 
     def setPara(self, text):
         self.sentences = text

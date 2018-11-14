@@ -91,6 +91,16 @@ class Naver:
         else:
             Nfinal_cNum=midcNum
         return int(Nfinal_cNum)
+    
+    def find_error(self,oburl):
+        r=requests.get(oburl)
+        c=r.content
+        soup=BeautifulSoup(c,"html.parser")
+        all=soup.find("span",{"class":"talk_author"})
+        if not all:
+            return False
+        else:
+            return True
 
     def crawlingData(self,s1,s2,d1,d2):
         self.bookName = s1
@@ -116,29 +126,30 @@ class Naver:
             
             #post-list를 찾아 all에 대입 후
             #all2에 배열 형태로 저장
-          
+            
             for item in all2:
-
                 dict2 = {}
                 d={}#사전 d
                 linkNum = item.find("dt").find("a")["href"]
-                date=item.find("dd",{"class":"txt_inline"}).text
-                title=item.find("dt").text
-                title=title[1:len(title)-1]
-                    
-                d["3link"]=linkNum
-                d["2title"]=title
-                d["1date"]=date
-                d["4content"]=self.bringContent(linkNum)
-                d["5comment"]=self.bringComment(linkNum)
-                d["6commentNum"]=self.bringCommentNum(linkNum)
-   #             d["7hitNum"]=self.bringHitNum(linkNum)
+                if not self.find_error(linkNum):
+                    date=item.find("dd",{"class":"txt_inline"}).text
+                    title=item.find("dt").text
+                    title=title[1:len(title)-1]
+                    print(title)
+                    d["3link"]=linkNum
+                    print(linkNum)
+                    d["2title"]=title
+                    d["1date"]=date
+                    d["4content"]=self.bringContent(linkNum)
+                    d["5comment"]=self.bringComment(linkNum)
+                    d["6commentNum"]=self.bringCommentNum(linkNum)
+       #             d["7hitNum"]=self.bringHitNum(linkNum)
                 
-                self.comSum+=d["6commentNum"]
-              #  self.hitSum+=d["7hitNum"]
+                    self.comSum+=d["6commentNum"]
+                  #  self.hitSum+=d["7hitNum"]
                     
-                l.append(d) #리스트에 사전 추가
-                df=pd.DataFrame(l)
+                    l.append(d) #리스트에 사전 추가
+                    df=pd.DataFrame(l)
                
         dict2["commentSum"]=self.comSum
     #    dict2["hitSum"]=self.hitSum
@@ -176,4 +187,4 @@ class Naver:
             Nfinal_hn=NmidHN[0]+NmidHN[1]
         else:
             Nfinal_hn=midHN
-        return(int(Nfinal_hn))'''  
+        return(int(Nfinal_hn))''' 

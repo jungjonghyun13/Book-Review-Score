@@ -54,6 +54,7 @@ class Sumanhui:
         #검색화면에서 게시글 url 모두 긁어오기
             article_list = driver.find_elements_by_css_selector("span.aaa > a.m-tcol-c")
             article_urls=[i.get_attribute('href')for i in article_list]
+            
            # print(article_urls)
         #article_urls가 빈 리스트인 경우, 게시글 끝
             if not article_urls:
@@ -87,20 +88,34 @@ class Sumanhui:
                 # 댓글수 추출
                     try:
                         commentNum=soup.select('div.reply-box a.reply_btn')[0].get_text()[3:]
-                        self.comSum += int(commentNum)
+                        
+                        if(len(commentNum)>=4):
+                            ScomNum=commentNum.split(",")
+                            SScomNum=ScomNum[0]+ScomNum[1]
+                        else:
+                            SScomNum=commentNum
+                        
+                        self.comSum += int(SScomNum)
                     except:
-                        commentNum=0
+                        SScomNum=0
                 # 날짜 추출
                     date=soup.select('div.fr td.m-tcol-c')[0].get_text()
                 # 조회수 추출
                     hitNum=soup.select('div.reply-box span.b')[1].get_text()
-                    self.hitSum += int(hitNum)
+                    if(len(hitNum)>=4):
+                        ShitNum=hitNum.split(",")
+                        SShitNum=ShitNum[0]+ShitNum[1]
+                    else:
+                        SShitNum=hitNum
+                    
+                    self.hitSum += int(SShitNum)
                 # 언급량 총합
                     self.refSum += 1
                 # dict형태로 만들어 결과 list에 저장
-                    res_list.append({'title' : title, 'content' : content,'comment':comment,
-                                 'commentNum':commentNum,'date':date,'hitNum':hitNum})
-            
+                    res_list.append({'2title' : title, '3link':article ,'4content' : content,'5comment':comment,
+                                 '6commentNum':SScomNum,'1date':date,'7hitNum':SShitNum})
+                    
+                    
             d["commentSum"]=self.comSum
             d["hitSum"]=self.hitSum
             d["refSum"]=self.refSum
